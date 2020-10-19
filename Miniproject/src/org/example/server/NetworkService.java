@@ -9,27 +9,26 @@ public class NetworkService implements Runnable {
 
 	private ServerSocket serverSocket;
 	private ExecutorService executorService;
-	
+
 	public NetworkService(int port, int poolSize)
-	
+
 			throws IOException {
-		
-		serverSocket = new ServerSocket();
+
+		serverSocket = new ServerSocket(port);
 		executorService = Executors.newFixedThreadPool(poolSize);
 	}
-	
+
 
 	public void run() {
 		try {
-			
+
 			for(;;) {
 				executorService.execute(new Handler(serverSocket.accept()));
 			}
-		
+
 		} catch(IOException e) {
 			executorService.shutdown();
 		}
 	}
 
 }
-
