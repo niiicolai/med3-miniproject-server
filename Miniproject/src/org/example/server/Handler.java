@@ -37,7 +37,7 @@ public class Handler implements Runnable {
                 // read severMsg from cmDHandler process to serverMsg
                 serverMsg = cmdHandler.process(clientMsg, this);
                 // Use outStream to write server message to client
-               
+                out.println(serverMsg);
             }
             
             // Wrap up and close operation
