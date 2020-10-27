@@ -8,6 +8,24 @@ public class CommandHandler {
 	var currentLobby = Handler.getLobby();
 	Pattern pattern = Pattern.compile(stringCmd, Pattern.CASE_INSENSITIVE);
 
+// If the client is in a lobby ->
+    if(currentLobby!=null)
+    {
+
+        // If the client wants to exit
+        if (pattern.matcher("Exit").find()) {
+            // Execute exit functionality
+        } else {
+            // Send a message to all members in a lobby
+            for (PrintWriter writer : currentLobby.getWriters()) {
+                writer.println(clientMsg);
+            }
+        }
+    }
+
+    // if the client is NOT in a lobby ->
+    else
+    {
 
 	 
 	  if (pattern.matcher("Join").find()) {
