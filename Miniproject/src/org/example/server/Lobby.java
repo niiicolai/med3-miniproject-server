@@ -22,4 +22,9 @@ private int id = 0;
 	public int getID() {
 		return id;
 	}
+	
+	public PrintWriter getWriters() 
+	{
+		return writers;
+	}
 }
