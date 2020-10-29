@@ -14,12 +14,17 @@ public class Handler implements Runnable {
     private String clientMsg;
     private String serverMsg;
     private PrintWriter out;
+    private int id;
     
    
 
     private Lobby lobby = null;
     
-    Handler(Socket socket) throws IOException {this.socket = socket;  this.out = new PrintWriter(socket.getOutputStream(), true);}
+    public Handler(int id, Socket socket) throws IOException {
+        this.id = id;
+        this.socket = socket;  
+        this.out = new PrintWriter(socket.getOutputStream(), true);
+    }
 
     
     public void run() {
@@ -61,5 +66,9 @@ public class Handler implements Runnable {
    public void setLobby(Lobby lobby) {
 	   this.lobby = lobby;
    }
+   public int getID() {
+	    return id;
+	  }
+   
     
 }

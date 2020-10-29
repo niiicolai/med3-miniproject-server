@@ -23,7 +23,7 @@ private int id = 0;
 		return id;
 	}
 	
-	public PrintWriter getWriters() 
+	public ArrayList<PrintWriter> getWriters() 
 	{
 		return writers;
 	}

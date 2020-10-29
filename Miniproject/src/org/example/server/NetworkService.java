@@ -9,6 +9,7 @@ public class NetworkService implements Runnable {
 
 	private ServerSocket serverSocket;
 	private ExecutorService executorService;
+	private static int nextID = 0;
 
 	public NetworkService(int port, int poolSize)
 
@@ -20,15 +21,16 @@ public class NetworkService implements Runnable {
 
 
 	public void run() {
-		try {
-
-			for(;;) {
-				executorService.execute(new Handler(serverSocket.accept()));
-			}
-
-		} catch(IOException e) {
-			executorService.shutdown();
-		}
+	    try {
+	        for(;;) {
+	            var nextSocket = serverSocket.accept();
+	            var handler = new Handler(nextID, nextSocket);                
+	            executorService.execute(handler);
+	            nextID = nextID+1;    
+	        }
+	    } catch(IOException e) {
+	      executorService.shutdown();
+	    }
 	}
 
 }
