@@ -4,68 +4,84 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-
 public class CommandHandler {
-	// Empty constructor
-	public static int nextID = 0;
-
-	public CommandHandler() 
-	{
+  	private boolean stopped = false;
+	
+	public CommandHandler() {
 		
 	}
-	
-	public String process(String stringCmd, Handler handler) {    
+
+	public String process(String stringCmd, Handler handler) {
 		
-	
+		var cmd = stringCmd.toUpperCase();
 		var serverMsg = "";
 		var currentLobby = handler.getLobby();
-		Pattern pattern = Pattern.compile(stringCmd, Pattern.CASE_INSENSITIVE);
-	
-		if(pattern.matcher("Join").find())
-		{
-			var id = Integer.parseInt(stringCmd);
-	
-			//for (int i = 0; i < lobbies.size(); i++) {
-				//var l = lobbies.get(i);
-				//if (id == l.getID()) {
-					//handler.setLobby(lobby);
-					//lobby.join(writer);
-					//break;
-				//}
-			//}
-		}else if(pattern.matcher("Create").find())
-		{
-	
-			var lobby = new Lobby(nextID);
-			var writer = handler.getWriter();
-			handler.setLobby(lobby);
-			lobby.join(writer);
-	
-			nextID++;
-	
-			// Create functionality
-		}else if(pattern.matcher("Find").find())
-		{
-//		    var newLineSymbol = System.getProperty("line.separator");
-//		    var strBuilder = new StringBuilder();
-//		    for (int i = 0; i i < lobbies.size(); i++) {
-//		      strBuilder.append("Lobby ID: ");
-//		      strBuilder.append(lobbies[i].getID());
-//		      strBuilder.append(newLineSymbol);
-//		    }
-//		    
-//		    serverMsg = strBuilder.toString();
-		  }
-	
 
+		// If the client is in a lobby ->
+	    if(currentLobby != null)
+	    {
+	        // If the client wants to exit the lobby
+	    	Pattern leavePattern = Pattern.compile("LEAVE", Pattern.CASE_INSENSITIVE);
+	        if (leavePattern.matcher(cmd).lookingAt()) {
+	        	serverMsg = "";
+	        } else {
+	        	
+	        }
+	    }
+	    // if the client is NOT in a lobby ->
+	    else
+	    {
+	    	Pattern joinPattern = Pattern.compile("JOIN", Pattern.CASE_INSENSITIVE);
+	    	Pattern createPattern = Pattern.compile("CREATE", Pattern.CASE_INSENSITIVE);
+	    	Pattern findPattern = Pattern.compile("FIND", Pattern.CASE_INSENSITIVE);
+	    	Pattern exitPattern = Pattern.compile("HELP", Pattern.CASE_INSENSITIVE);
+	    	Pattern helpPattern = Pattern.compile("EXIT", Pattern.CASE_INSENSITIVE);
+	    	
+		    if (joinPattern.matcher(cmd).lookingAt()) {
+			    serverMsg = ""
+		    }
+		    else if (createPattern.matcher(cmd).lookingAt()) {
+			    serverMsg = "";
+		    }
+		    else if (findPattern.matcher(cmd).lookingAt()) {	    
+		        serverMsg = "";
+		    }
+		    else if (exitPattern.matcher(cmd).lookingAt()) {	    
+			    serverMsg = help(handler);
+		    }
+		    else if (exitPattern.matcher(cmd).lookingAt()) {	    
+			    serverMsg = this.stop(handler);
+		    }
+		    else {
+		    	serverMsg = "Invalid command! Try with 'help'.";
+		    }
+		}
 
-		// Return some server msg
 		return serverMsg;
-
-	}
-	public boolean isStopped() 
-	{
-		return false;
 	}
 	
+	private String help(Handler handler) {
+		var helpMsg = "#n" +
+					  "Client number: " + handler.getID() + " #n" +
+				      "You are currently not in a lobby. #n #n" +
+					  "Lobby commands: (only availabe when connected to a lobby) #n" +
+					  "Leave - leaves the current lobby #n #n" +
+					  "Menu commands: #n" +
+					  "Create - creates a new lobby and connects to it, #n" +
+					  "Join <id> - connect to a lobby with id, #n" +
+					  "Find - returns a list of current lobbies, #n" +
+					  "Exit - Close the client's connection #n";
+	    
+	    return helpMsg;
+	}
+
+	private String stop(Handler handler) {
+
+		  stopped = true;
+    	return "Goodbye";
+	}
+	
+	public boolean isStopped() {
+		return stopped;
+	}
 }
