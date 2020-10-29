@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class CommandHandler {
-  	private boolean stopped = false;
+
+	private boolean stopped = false;
 	
 	public CommandHandler() {
 		
@@ -23,9 +24,9 @@ public class CommandHandler {
 	        // If the client wants to exit the lobby
 	    	Pattern leavePattern = Pattern.compile("LEAVE", Pattern.CASE_INSENSITIVE);
 	        if (leavePattern.matcher(cmd).lookingAt()) {
-	        	serverMsg = "";
+	        	serverMsg = Lobby.leave(handler);
 	        } else {
-	        	
+	        	currentLobby.broadcast(handler, stringCmd);
 	        }
 	    }
 	    // if the client is NOT in a lobby ->
@@ -38,13 +39,13 @@ public class CommandHandler {
 	    	Pattern helpPattern = Pattern.compile("EXIT", Pattern.CASE_INSENSITIVE);
 	    	
 		    if (joinPattern.matcher(cmd).lookingAt()) {
-			    serverMsg = ""
+			    serverMsg = Lobby.join(stringCmd, handler);
 		    }
 		    else if (createPattern.matcher(cmd).lookingAt()) {
-			    serverMsg = "";
+			    serverMsg = Lobby.create(handler);
 		    }
 		    else if (findPattern.matcher(cmd).lookingAt()) {	    
-		        serverMsg = "";
+		        serverMsg = Lobby.find();
 		    }
 		    else if (exitPattern.matcher(cmd).lookingAt()) {	    
 			    serverMsg = help(handler);
@@ -76,8 +77,8 @@ public class CommandHandler {
 	}
 
 	private String stop(Handler handler) {
-
-		  stopped = true;
+		Lobby.leave(handler);
+		stopped = true;
     	return "Goodbye";
 	}
 	
