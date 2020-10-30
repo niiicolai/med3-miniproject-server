@@ -2,7 +2,9 @@ package org.example.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Lobby {
 	
@@ -26,16 +28,18 @@ public class Lobby {
 	}
 	
 	public void broadcast(Handler sender, String msg) {
-		var message = "Client " + sender.getID() + ": " + msg;
-		try {
-			for (Handler handler : handlers) {	
-				handler.message(message);	
-	        }
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		  var message = sender.getFormattedName() +
+		          "(" + Date() + ")" + 
+		          ": " + msg;
+		        
+		  try {
+		    for (Handler handler : handlers) {    
+		      handler.message(message);    
+		    }
+		  } catch (IOException e) {
+		    e.printStackTrace();
+		  }
 		}
-	}
 	
 	public static String join(String str, Handler handler) {
 		try {  
@@ -111,4 +115,11 @@ public class Lobby {
 
     	return "Lobby was quitted!";
 	}
+	
+	public String Date() {
+		  Date date = new Date();
+		  SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		  return formatter.format(date);
+		}
+	
 }

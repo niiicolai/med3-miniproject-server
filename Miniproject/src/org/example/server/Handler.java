@@ -9,6 +9,7 @@ public class Handler implements Runnable {
     
     private Socket socket;
     private int id;
+    private String formattedName;
     
     // Added client and server messages
     private String clientMsg;
@@ -30,7 +31,14 @@ public class Handler implements Runnable {
             var cmdHandler = new CommandHandler();
 
             //Loop for when cmdHandler is stopped
-            while (!cmdHandler.isStopped()) {    
+            while (!cmdHandler.isStopped()) {
+            	
+            	if (formattedName == null) {
+            		var name = inStream.readUTF();
+            		formattedName = id+"-"+name;
+            		continue;
+            	}
+            	
                 // read client message from instream to clientMsg 
                 clientMsg = inStream.readUTF();
                 // read severMsg from cmDHandler process to serverMsg
@@ -69,5 +77,8 @@ public class Handler implements Runnable {
    
     public void setLobby(Lobby lobby) {
 	    this.lobby = lobby;
+    }
+    public String getFormattedName() {
+    	return formattedName;
     }
 }
