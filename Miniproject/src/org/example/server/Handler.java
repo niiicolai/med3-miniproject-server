@@ -23,7 +23,7 @@ public class Handler implements Runnable {
     	this.writer = new PrintWriter(socket.getOutputStream(), true);
     }
 
-    
+    @Override
     public void run() {
         try {
             // Instanced inStream, outStream and cmdHandler
