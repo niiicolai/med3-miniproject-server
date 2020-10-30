@@ -64,6 +64,7 @@ public class CommandHandler {
 	private String help(Handler handler) {
 		var helpMsg = "#n" +
 					  "Client number: " + handler.getID() + " #n" +
+					  "Username: " + handler.getFormattedName() + " #n" +
 				      "You are currently not in a lobby. #n #n" +
 					  "Lobby commands: (only availabe when connected to a lobby) #n" +
 					  "Leave - leaves the current lobby #n #n" +
