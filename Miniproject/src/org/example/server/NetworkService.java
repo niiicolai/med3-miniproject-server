@@ -8,10 +8,13 @@ import java.util.regex.Pattern;
 
 public class NetworkService implements Runnable {
 	
+	private static final int threadPoolSize = 10;
+	private static final int port = 6666;
+	
 	public static void main(String[] args) {
 
 		try {
-			var networkService = new NetworkService (6666, 10);
+			var networkService = new NetworkService (port, threadPoolSize);
 			var serverThread = new Thread(networkService);
 			
 			serverThread.start();
@@ -31,7 +34,7 @@ public class NetworkService implements Runnable {
 		executorService = Executors.newFixedThreadPool(poolSize);
 	}
 
-
+	@Override
 	public void run() {
 		try {
 
