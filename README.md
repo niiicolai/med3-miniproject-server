@@ -6,7 +6,7 @@ This repository contains the code for the server for the mini-project. The goal 
 
 ---
 
-- [Server](https://github.com/niiicolai/med3-miniproject-server/wiki)
+- [Server Wiki](https://github.com/niiicolai/med3-miniproject-server/wiki)
   - [Install & usage](https://github.com/niiicolai/med3-miniproject-server/wiki/Install-&-usage)
   - [SCRUM](https://github.com/niiicolai/med3-miniproject-server/wiki/SCRUM)
   - [Communication Protocol](https://github.com/niiicolai/med3-miniproject-server/wiki/Communication-Protocol)
@@ -17,7 +17,7 @@ This repository contains the code for the server for the mini-project. The goal 
 
 ---
 
-- [Client](https://github.com/niiicolai/med3-miniproject-client/wiki)
+- [Client Wiki](https://github.com/niiicolai/med3-miniproject-client/wiki)
   - [Install & usage](https://github.com/niiicolai/med3-miniproject-client/wiki/Install-&-usage)
   - [SCRUM](https://github.com/niiicolai/med3-miniproject-client/wiki/SCRUM)
   - [Communication Protocol](https://github.com/niiicolai/med3-miniproject-client/wiki/Communication-Protocol)
