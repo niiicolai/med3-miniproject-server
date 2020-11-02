@@ -7,6 +7,24 @@ import java.util.regex.Pattern;
 public class CommandHandler {
 
 	private boolean stopped = false;
+	private static final String handlerIsStoppedMsg = "Goodbye";
+	private static final String invalidCommandMsg = "Invalid command! Try with 'help'.";
+	
+	private static final String cmdClientNum = "Client number: ";
+	private static final String cmdUsername = "Username: ";
+	private static final String cmdNoLobby = "You are currently not in a lobby.";
+	private static final String cmdLobbyCommands = "Lobby commands: (only availabe when connected to a lobby) ";
+	private static final String cmdLeave = "Leave - leaves the current lobby";
+	private static final String cmdMenuCommands =  "Menu commands: ";
+	private static final String cmdCreate =  "Create - creates a new lobby and connects to it, ";
+	private static final String cmdJoin =   "Join <id> - connect to a lobby with id, ";
+	private static final String cmdFind =  "Find - returns a list of current lobbies, ";
+	private static final String cmdExit =  "Exit - Close the client's connection ";
+	
+	
+	private static final String newLine = "#n";
+	private static final String newLineSpace = " #n";
+	private static final String newLineSpaceDouble = " #n #n";
 	
 	public CommandHandler() {
 		
@@ -54,7 +72,7 @@ public class CommandHandler {
 			    serverMsg = this.stop(handler);
 		    }
 		    else {
-		    	serverMsg = "Invalid command! Try with 'help'.";
+		    	serverMsg = invalidCommandMsg;
 		    }
 		}
 
@@ -62,17 +80,17 @@ public class CommandHandler {
 	}
 	
 	private String help(Handler handler) {
-		var helpMsg = "#n" +
-					  "Client number: " + handler.getID() + " #n" +
-					  "Username: " + handler.getFormattedName() + " #n" +
-				      "You are currently not in a lobby. #n #n" +
-					  "Lobby commands: (only availabe when connected to a lobby) #n" +
-					  "Leave - leaves the current lobby #n #n" +
-					  "Menu commands: #n" +
-					  "Create - creates a new lobby and connects to it, #n" +
-					  "Join <id> - connect to a lobby with id, #n" +
-					  "Find - returns a list of current lobbies, #n" +
-					  "Exit - Close the client's connection #n";
+		var helpMsg = newLine +
+				cmdClientNum + handler.getID() + newLineSpace +
+					  cmdUsername + handler.getFormattedName() + newLineSpace +
+				      cmdNoLobby + newLineSpaceDouble +
+					  cmdLobbyCommands + newLine +
+					  cmdLeave + newLineSpaceDouble +
+					  cmdMenuCommands + newLine +
+					  cmdCreate + newLine +
+					  cmdJoin + newLine +
+					  cmdFind + newLine +
+					  cmdExit + newLine;
 	    
 	    return helpMsg;
 	}
@@ -80,7 +98,7 @@ public class CommandHandler {
 	private String stop(Handler handler) {
 		Lobby.leave(handler);
 		stopped = true;
-    	return "Goodbye";
+    	return handlerIsStoppedMsg;
 	}
 	
 	public boolean isStopped() {

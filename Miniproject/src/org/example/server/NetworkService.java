@@ -10,6 +10,8 @@ public class NetworkService implements Runnable {
 	
 	private static final int threadPoolSize = 10;
 	private static final int port = 6666;
+	private static final String serverWelcomeMsg = "Welcome to the server, Client no.";
+	private static final String serverNumLobbiesMsg = " - Current number of lobbies: ";
 	
 	public static void main(String[] args) {
 
@@ -42,7 +44,7 @@ public class NetworkService implements Runnable {
 				var nextSocket = serverSocket.accept();
 				var handler = new Handler(nextID, nextSocket);				
 				executorService.execute(handler);
-				handler.message("Welcome to the server, Client no."+nextID+" - Current number of lobbies: " + Lobby.lobbies.size());
+				handler.message(serverWelcomeMsg+nextID+serverNumLobbiesMsg + Lobby.lobbies.size());
 				nextID = nextID+1;	
 			}
 		} catch(IOException e) {

@@ -16,6 +16,7 @@ public class Handler implements Runnable {
     private String serverMsg;
     private PrintWriter writer;
     private Lobby lobby = null;
+    private static final String handlerWelcomeMsg =  "Welcome to the server";
     
     Handler(int id, Socket socket) throws IOException {
     	this.id = id;
@@ -68,7 +69,7 @@ public class Handler implements Runnable {
     }
     
     public void welcome() throws IOException {
-    	message("Welcome to the server");
+    	message(handlerWelcomeMsg);
     }
     
     public Lobby getLobby() {
