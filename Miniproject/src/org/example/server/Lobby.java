@@ -9,6 +9,18 @@ import java.util.Date;
 public class Lobby {
 
 	private int id = 0;
+	private static final String lobbyJoinMsg = "Please provide an ID";
+	private static final String lobbyjoinedMsg = "joined the lobby";
+	private static final String lobbyWelcomeMsg = "Welcome to lobby ";
+	private static final String lobbyNotFoundMsg = "Lobby not found!";
+	private static final String lobbiesNotFoundMsg = "No lobbies were found!";
+	private static final String lobbyIDMsg = "Lobby ID: ";
+	private static final String lobbyNotInMsg = "Currently not in a lobby";
+	private static final String lobbyLeftMsg = "left the lobby";
+	private static final String lobbyQuitMsg = "Lobby was quitted!";
+	private static final String lobbiesCurrent = "Current lobbies: ";
+
+	private static final String newLine = "#n";
 
 	public ArrayList<Handler> handlers = new ArrayList<Handler>();
 
@@ -46,7 +58,7 @@ public class Lobby {
 			var id = Integer.parseInt(numberStr);
 			return join(id, handler);
 		} catch (NumberFormatException e) {
-			return "Please provide a ID";
+			return lobbyJoinMsg;
 		}
 	}
 
@@ -61,30 +73,30 @@ public class Lobby {
 		}
 
 		if (newLobby != null) {
-			newLobby.broadcast(handler, "joined the lobby");
+			newLobby.broadcast(handler, lobbyjoinedMsg);
 
 			handler.setLobby(newLobby);
 			newLobby.getHandlers().add(handler);
-			return "Welcome to lobby " + newLobby.getID();
+			return lobbyWelcomeMsg + newLobby.getID();
 		} else {
-			return "Lobby not found!";
+			return lobbyNotFoundMsg;
 		}
 	}
 
 	public static String find() {
 
 		if (lobbies.size() == 0) {
-			return "No lobbies were found!";
+			return lobbiesNotFoundMsg;
 		}
 
 		var newLineSymbol = System.getProperty("line.separator");
 		var strBuilder = new StringBuilder();
-		strBuilder.append("#n");
-		strBuilder.append("Current lobbies: #n");
+		strBuilder.append(newLine);
+		strBuilder.append(lobbiesCurrent + newLine);
 		for (int i = 0; i < lobbies.size(); i++) {
-			strBuilder.append("Lobby ID: ");
+			strBuilder.append(lobbyIDMsg);
 			strBuilder.append(lobbies.get(i).getID());
-			strBuilder.append("#n");
+			strBuilder.append(newLine);
 		}
 
 		return strBuilder.toString();
@@ -97,13 +109,13 @@ public class Lobby {
 		lobby.getHandlers().add(handler);
 		nextID++;
 
-		return "Welcome to lobby " + lobby.getID();
+		return lobbyWelcomeMsg + lobby.getID();
 	}
 
 	public static String leave(Handler handler) {
 		var currentLobby = handler.getLobby();
 		if (currentLobby == null)
-			return "Currently not in a lobby";
+			return lobbyNotInMsg;
 
 		currentLobby.getHandlers().remove(handler);
 		handler.setLobby(null);
@@ -111,10 +123,10 @@ public class Lobby {
 		if (currentLobby.getHandlers().size() == 0) {
 			lobbies.remove(currentLobby);
 		} else {
-			currentLobby.broadcast(handler, "left the lobby");
+			currentLobby.broadcast(handler, lobbyLeftMsg);
 		}
 
-		return "Lobby was quitted!";
+		return lobbyQuitMsg;
 	}
 
 	public String Date() {
