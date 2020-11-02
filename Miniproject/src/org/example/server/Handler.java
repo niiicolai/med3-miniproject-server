@@ -1,6 +1,7 @@
 package org.example.server;
 
 import java.net.Socket;
+import java.net.SocketException;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +18,7 @@ public class Handler implements Runnable {
 	private PrintWriter writer;
 	private Lobby lobby = null;
 	private static final String handlerWelcomeMsg = "Welcome to the server";
+	private static final String serverQuitLogMsg = "Client left the server - id: ";
 
 	Handler(int id, Socket socket) throws IOException {
 		this.id = id;
@@ -26,39 +28,59 @@ public class Handler implements Runnable {
 
 	@Override
 	public void run() {
+		
+		var cmdHandler = new CommandHandler();
+		DataInputStream inStream = null;
 		try {
 			// Instanced inStream, outStream and cmdHandler
-			var inStream = new DataInputStream(socket.getInputStream());
-			var cmdHandler = new CommandHandler();
+			inStream = new DataInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-			// Loop for when cmdHandler is stopped
-			while (!cmdHandler.isStopped()) {
+		// Loop for when cmdHandler is stopped
+		while (!cmdHandler.isStopped()) {
 
-				if (formattedName == null) {
-					var name = inStream.readUTF();
-					formattedName = id + "-" + name;
-					continue;
+			if (formattedName == null) {
+
+				String name = "";
+				try {
+					name = inStream.readUTF();
+				} catch (IOException e) {
+					cmdHandler.stop(this);
 				}
 
-				// read client message from instream to clientMsg
+				formattedName = id + "-" + name;
+				continue;
+			}
+
+			// read client message from instream to clientMsg
+			try {
 				clientMsg = inStream.readUTF();
+
 				// read severMsg from cmDHandler process to serverMsg
 				serverMsg = cmdHandler.process(clientMsg, this);
 				// Use outStream to write server message to client
 				if (serverMsg.length() > 0) {
 					message(serverMsg);
 				}
+			} catch (IOException e) {
+				cmdHandler.stop(this);
 			}
+		}
 
+		try {
 			// Wrap up and close operation
 			inStream.close();
 			socket.close();
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			System.out.println(serverQuitLogMsg + id);
 		}
-		;
+
 	}
 
 	public int getID() {

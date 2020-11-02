@@ -87,7 +87,7 @@ public class CommandHandler {
 		return helpMsg;
 	}
 
-	private String stop(Handler handler) {
+	public String stop(Handler handler) {
 		Lobby.leave(handler);
 		stopped = true;
 		return handlerIsStoppedMsg;
