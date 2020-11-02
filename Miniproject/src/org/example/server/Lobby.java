@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Lobby {
-	
+
 	private int id = 0;
 	private static final String lobbyJoinMsg = "Please provide an ID";
 	private static final String lobbyjoinedMsg = "joined the lobby";
@@ -19,11 +19,11 @@ public class Lobby {
 	private static final String lobbyLeftMsg = "left the lobby";
 	private static final String lobbyQuitMsg = "Lobby was quitted!";
 	private static final String lobbiesCurrent = "Current lobbies: ";
-	
+
 	private static final String newLine = "#n";
 
 	public ArrayList<Handler> handlers = new ArrayList<Handler>();
-	
+
 	public static int nextID = 0;
 	public static ArrayList<Lobby> lobbies = new ArrayList<Lobby>();
 
@@ -34,104 +34,105 @@ public class Lobby {
 	public int getID() {
 		return id;
 	}
-	
+
 	public ArrayList<Handler> getHandlers() {
 		return handlers;
 	}
-	
+
 	public void broadcast(Handler sender, String msg) {
-		  var message = sender.getFormattedName() +
-		          "(" + Date() + ")" + 
-		          ": " + msg;
-		        
-		  try {
-		    for (Handler handler : handlers) {    
-		      handler.message(message);    
-		    }
-		  } catch (IOException e) {
-		    e.printStackTrace();
-		  }
+		var message = sender.getFormattedName() + "(" + Date() + ")" + ": " + msg;
+
+		try {
+			for (Handler handler : handlers) {
+				handler.message(message);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-	
+	}
+
 	public static String join(String str, Handler handler) {
-		try {  
-			 var id = Integer.parseInt(str.replaceAll("\\D+",""));
-	         return join(id, handler);
-	      } catch (NumberFormatException e) {  
-	         return lobbyJoinMsg;  
-	    }  
+		try {
+			var regex = "\\D+";
+			var numberStr = str.replaceAll(regex, "");
+			var id = Integer.parseInt(numberStr);
+			return join(id, handler);
+		} catch (NumberFormatException e) {
+			return lobbyJoinMsg;
+		}
 	}
-	
-	public static String join(int id, Handler handler) {    
-	    Lobby newLobby = null;
-	    for (int i = 0; i < lobbies.size(); i++) {
-	      var iLobby = lobbies.get(i);
-	      if (iLobby.getID() == id) {
-	        newLobby = iLobby;
-	        break;
-	      }
-	    }
-	    
-	    if (newLobby != null) {
-	    	newLobby.broadcast(handler, lobbyjoinedMsg);
-	    	
-	    	handler.setLobby(newLobby);
-	    	newLobby.getHandlers().add(handler);
-	    	return lobbyWelcomeMsg + newLobby.getID();
-	    } else {
-	    	return lobbyNotFoundMsg;
-	    }	    
+
+	public static String join(int id, Handler handler) {
+		Lobby newLobby = null;
+		for (int i = 0; i < lobbies.size(); i++) {
+			var iLobby = lobbies.get(i);
+			if (iLobby.getID() == id) {
+				newLobby = iLobby;
+				break;
+			}
+		}
+
+		if (newLobby != null) {
+			newLobby.broadcast(handler, lobbyjoinedMsg);
+
+			handler.setLobby(newLobby);
+			newLobby.getHandlers().add(handler);
+			return lobbyWelcomeMsg + newLobby.getID();
+		} else {
+			return lobbyNotFoundMsg;
+		}
 	}
-	
+
 	public static String find() {
-		
+
 		if (lobbies.size() == 0) {
 			return lobbiesNotFoundMsg;
 		}
-		
+
 		var newLineSymbol = System.getProperty("line.separator");
-	    var strBuilder = new StringBuilder();
-	    strBuilder.append(newLine);
-	    strBuilder.append(lobbiesCurrent+newLine);
-	    for (int i = 0; i < lobbies.size(); i++) {
-	      strBuilder.append(lobbyIDMsg);
-	      strBuilder.append(lobbies.get(i).getID());
-	      strBuilder.append(newLine);
-	    }
-	    
-	    return strBuilder.toString();
+		var strBuilder = new StringBuilder();
+		strBuilder.append(newLine);
+		strBuilder.append(lobbiesCurrent + newLine);
+		for (int i = 0; i < lobbies.size(); i++) {
+			strBuilder.append(lobbyIDMsg);
+			strBuilder.append(lobbies.get(i).getID());
+			strBuilder.append(newLine);
+		}
+
+		return strBuilder.toString();
 	}
-	
+
 	public static String create(Handler handler) {
 		var lobby = new Lobby(nextID);
-	    lobbies.add(lobby);
-	    handler.setLobby(lobby);
-	    lobby.getHandlers().add(handler);
-	    nextID++;
-	    
-	    return lobbyWelcomeMsg + lobby.getID();
+		lobbies.add(lobby);
+		handler.setLobby(lobby);
+		lobby.getHandlers().add(handler);
+		nextID++;
+
+		return lobbyWelcomeMsg + lobby.getID();
 	}
-	
+
 	public static String leave(Handler handler) {
 		var currentLobby = handler.getLobby();
-		if (currentLobby == null) return lobbyNotInMsg;
+		if (currentLobby == null)
+			return lobbyNotInMsg;
 
-    	currentLobby.getHandlers().remove(handler);
-    	handler.setLobby(null);
-		
+		currentLobby.getHandlers().remove(handler);
+		handler.setLobby(null);
+
 		if (currentLobby.getHandlers().size() == 0) {
 			lobbies.remove(currentLobby);
 		} else {
 			currentLobby.broadcast(handler, lobbyLeftMsg);
 		}
 
-    	return lobbyQuitMsg;
+		return lobbyQuitMsg;
 	}
-	
+
 	public String Date() {
-		  Date date = new Date();
-		  SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		  return formatter.format(date);
-		}
-	
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		return formatter.format(date);
+	}
+
 }
