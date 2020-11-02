@@ -72,10 +72,17 @@ public class CommandHandler {
 	}
 
 	private String help(Handler handler) {
-		var helpMsg = newLine + cmdClientNum + handler.getID() + newLineSpace + cmdUsername + handler.getFormattedName()
-				+ newLineSpace + cmdNoLobby + newLineSpaceDouble + cmdLobbyCommands + newLine + cmdLeave
-				+ newLineSpaceDouble + cmdMenuCommands + newLine + cmdCreate + newLine + cmdJoin + newLine + cmdFind
-				+ newLine + cmdExit + newLine;
+		var helpMsg = newLine + 
+				  cmdClientNum + handler.getID() + newLineSpace + 
+				  cmdUsername + handler.getFormattedName() + newLineSpace + 
+				  cmdNoLobby + newLineSpaceDouble + 
+				  cmdLobbyCommands + newLine + 
+				  cmdLeave + newLineSpaceDouble + 
+				  cmdMenuCommands + newLine + 
+				  cmdCreate + newLine + 
+				  cmdJoin + newLine + 
+				  cmdFind + newLine + 
+				  cmdExit + newLine;
 
 		return helpMsg;
 	}
