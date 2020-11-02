@@ -1,5 +1,8 @@
 # med3-miniproject-server
 
+This repository contains the code for the server for the mini-project. <br/>
+Use the links below to read information about the server or the client for this project.
+
 ---
 
 - [Server](https://github.com/niiicolai/med3-miniproject-server/wiki)
